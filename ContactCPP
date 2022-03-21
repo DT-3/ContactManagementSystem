@@ -1,0 +1,148 @@
+#include "Contact.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+// Constructor
+Contact::Contact()
+{
+	cnt = 0;
+	fname = "Bob";
+	lname = "Marley";
+	street = "124 Street";
+	state = "AZ";
+	zip = "52445";
+	number = "(544) 545 3444";
+}
+
+// Method that makes the contact info and prints it to the text file
+void Contact::MakeContact()
+{
+	fstream myFile;
+	int cnt = 1;
+	myFile.open("logbook.txt", ios::app);
+	// Loops until the user enters a negative one
+	while (true)
+	{
+		cout << "enter first name: " << endl;
+		getline(cin, fname);
+		if (fname == "-1")
+		{
+			break;
+		}
+		myFile << cnt << endl << endl;
+		myFile << fname << endl;
+
+		cout << "enter last name: " << endl;
+		getline(cin, lname);
+		if (lname == "-1")
+		{
+			break;
+		}
+		myFile << lname << endl << endl;
+
+		cout << "enter street address: " << endl;
+		getline(cin, street);
+		if (street == "-1")
+		{
+			break;
+		}
+		myFile << street << endl;
+
+		cout << "enter state: " << endl;
+		getline(cin, state);
+		if (state == "-1")
+		{
+			break;
+		}
+		myFile << state << endl;
+
+		cout << "enter zip: " << endl;
+		getline(cin, zip);
+		if (zip == "-1")
+		{
+			break;
+		}
+		myFile << zip << endl << endl;
+
+		cout << "enter phone number: " << endl;
+		getline(cin, number);
+		if (number == "-1")
+		{
+			break;
+		}
+		myFile << number << endl;
+		cnt++;
+	}
+	myFile.close();
+}
+
+// Method that handles when the user searchs by number
+void Contact::SearchNumber()
+{
+	ifstream myFile;
+	cout << "Enter a number to search: ";
+	cin >> searchData;
+	myFile.open("logbook.txt", ios::in);
+	// While loop that goes through the entire file
+	while (getline(myFile, temp))
+	{
+		if (temp == searchData)
+		{
+			// For loop that prints to the console from the file the correct amount of information
+			for (int i = 0; i < 7; i++)
+			{
+				getline(myFile, temp);
+				cout << temp << endl;
+			}
+			break;
+		}
+	}
+	myFile.close();
+}
+
+// Method for serching by name
+void Contact::SearchName()
+{
+	ifstream myFile;
+	cout << "Enter a first name to search: ";
+	cin >> searchData;
+	myFile.open("logbook.txt", ios::in);
+	// While loop that goes through the file until it finds what the user was looking for
+	while (getline(myFile, temp))
+	{
+		if (temp == searchData)
+		{
+			cout << temp << endl;
+			// For loop that prints out the correct amount of information from the text file
+			for (int i = 0; i < 7; i++)
+			{
+				getline(myFile, temp);
+				cout << temp << endl;
+			}
+			break;
+		}
+	}
+	myFile.close();
+}
+
+// Method that calls the two search methods based on how the user would like to search (name or number)
+void Contact::Search()
+{
+	int in;
+	cout << "would you like to search by name(1) or number(2)? ";
+	cin >> in;
+	if (in == 1)
+	{
+		SearchName();
+	}
+	else if(in == 2)
+	{
+		SearchNumber();
+	}
+	else
+	{
+		cout << "You did not enter a valid input";
+	}
+}
